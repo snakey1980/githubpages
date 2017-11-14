@@ -4,7 +4,7 @@ date: 2017-11-13T19:49:44-05:00
 draft: true
 ---
 
-#### Picking names from a hat
+#### Names in a hat
 
 The first time I played Secret Santa we assigned givers/receivers like this:
 
@@ -61,35 +61,58 @@ This could happen in a real names-in-a-hat situation too.  When it does, there's
         }
     }
     
-This way always seems to stop, so we are doing slightly better:
+This always seems to stop, so we are doing slightly better:
 
     (1..100_000).forEach { SecretSanta().draw2(setOf(1, 2, 3, 4)) }
     
-With 4 players, there aren't many valid assignments.  We can list them:
+With 4 players, there aren't many valid assignments.  We can list out all the permutations and pick out the 9 valid ones:
 
-               ASSIGNMENT            VALID?
+               PERMUTATION            VALID SECRET SANTA ASSIGNMENT?
 
-    [(1, 1), (2, 2), (3, 3), (4, 4)]   no
-    [(1, 1), (2, 2), (3, 4), (4, 3)]   no
-    [(1, 1), (2, 3), (3, 2), (4, 4)]   no
-    [(1, 1), (2, 3), (3, 4), (4, 2)]   no
-    [(1, 1), (2, 4), (3, 2), (4, 3)]   no
-    [(1, 1), (2, 4), (3, 3), (4, 2)]   no
-    [(1, 2), (2, 1), (3, 3), (4, 4)]   no
-    [(1, 2), (2, 1), (3, 4), (4, 3)]   yes
-    [(1, 2), (2, 3), (3, 1), (4, 4)]   no
-    [(1, 2), (2, 3), (3, 4), (4, 1)]   yes
-    [(1, 2), (2, 4), (3, 1), (4, 3)]   yes
-    [(1, 2), (2, 4), (3, 3), (4, 1)]   no
-    [(1, 3), (2, 1), (3, 2), (4, 4)]   no
-    [(1, 3), (2, 1), (3, 4), (4, 2)]   yes
-    [(1, 3), (2, 2), (3, 1), (4, 4)]   no
-    [(1, 3), (2, 2), (3, 4), (4, 1)]   no
-    [(1, 3), (2, 4), (3, 1), (4, 2)]   yes
-    [(1, 3), (2, 4), (3, 2), (4, 1)]   yes
-    [(1, 4), (2, 1), (3, 2), (4, 3)]   yes
-    [(1, 4), (2, 1), (3, 3), (4, 2)]   no
-    [(1, 4), (2, 2), (3, 1), (4, 3)]   no
-    [(1, 4), (2, 2), (3, 3), (4, 1)]   no
-    [(1, 4), (2, 3), (3, 1), (4, 2)]   yes
-    [(1, 4), (2, 3), (3, 2), (4, 1)]   yes
+    [(1, 1), (2, 2), (3, 3), (4, 4)]              no
+    [(1, 1), (2, 2), (3, 4), (4, 3)]              no
+    [(1, 1), (2, 3), (3, 2), (4, 4)]              no
+    [(1, 1), (2, 3), (3, 4), (4, 2)]              no
+    [(1, 1), (2, 4), (3, 2), (4, 3)]              no
+    [(1, 1), (2, 4), (3, 3), (4, 2)]              no
+    [(1, 2), (2, 1), (3, 3), (4, 4)]              no
+    [(1, 2), (2, 1), (3, 4), (4, 3)]              yes
+    [(1, 2), (2, 3), (3, 1), (4, 4)]              no
+    [(1, 2), (2, 3), (3, 4), (4, 1)]              yes
+    [(1, 2), (2, 4), (3, 1), (4, 3)]              yes
+    [(1, 2), (2, 4), (3, 3), (4, 1)]              no
+    [(1, 3), (2, 1), (3, 2), (4, 4)]              no
+    [(1, 3), (2, 1), (3, 4), (4, 2)]              yes
+    [(1, 3), (2, 2), (3, 1), (4, 4)]              no
+    [(1, 3), (2, 2), (3, 4), (4, 1)]              no
+    [(1, 3), (2, 4), (3, 1), (4, 2)]              yes
+    [(1, 3), (2, 4), (3, 2), (4, 1)]              yes
+    [(1, 4), (2, 1), (3, 2), (4, 3)]              yes
+    [(1, 4), (2, 1), (3, 3), (4, 2)]              no
+    [(1, 4), (2, 2), (3, 1), (4, 3)]              no
+    [(1, 4), (2, 2), (3, 3), (4, 1)]              no
+    [(1, 4), (2, 3), (3, 1), (4, 2)]              yes
+    [(1, 4), (2, 3), (3, 2), (4, 1)]              yes
+    
+A good test would be to see if our procedure return each of the nine, and that it returns each one one ninth of the time:
+
+    val patterns = mutableMapOf<List<Pair<Int, Int>>, Int>()
+        (1..100_000).forEach {
+            val pattern = SecretSanta().draw2(setOf(1, 2, 3, 4))
+            patterns[pattern] = patterns.getOrDefault(pattern, 0) + 1
+        }
+        patterns.entries.sortedByDescending { it.value }.forEach { println(it) }
+        
+We run it 100,000 times and would expect each pattern to occur around 11111 times.  But:
+
+    [(1, 4), (2, 1), (3, 2), (4, 3)]=19241
+    [(1, 2), (2, 4), (3, 1), (4, 3)]=13004
+    [(1, 2), (2, 1), (3, 4), (4, 3)]=12943
+    [(1, 3), (2, 4), (3, 2), (4, 1)]=9775
+    [(1, 4), (2, 3), (3, 1), (4, 2)]=9720
+    [(1, 4), (2, 3), (3, 2), (4, 1)]=9685
+    [(1, 3), (2, 4), (3, 1), (4, 2)]=9591
+    [(1, 3), (2, 1), (3, 4), (4, 2)]=9532
+    [(1, 2), (2, 3), (3, 4), (4, 1)]=6509
+    
+The algorithm is biased.  To see why
