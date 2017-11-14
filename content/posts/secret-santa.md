@@ -97,11 +97,11 @@ With 4 players, there aren't many valid assignments.  We can list out all the pe
 A good test would be to see if our procedure return each of the nine, and that it returns each one one ninth of the time:
 
     val patterns = mutableMapOf<List<Pair<Int, Int>>, Int>()
-        (1..100_000).forEach {
-            val pattern = SecretSanta().draw2(setOf(1, 2, 3, 4))
-            patterns[pattern] = patterns.getOrDefault(pattern, 0) + 1
-        }
-        patterns.entries.sortedByDescending { it.value }.forEach { println(it) }
+    (1..100_000).forEach {
+        val pattern = SecretSanta().draw2(setOf(1, 2, 3, 4))
+        patterns[pattern] = patterns.getOrDefault(pattern, 0) + 1
+    }
+    patterns.entries.sortedByDescending { it.value }.forEach { println(it) }
         
 We run it 100,000 times and would expect each pattern to occur around 11111 times.  But:
 
