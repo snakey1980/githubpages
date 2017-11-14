@@ -176,4 +176,16 @@ We are generating permutations of the players and rejecting them if they are not
     Found 265 derangements for 6 players
     Found 1854 derangements for 7 players
     
-This agrees with https://oeis.org/A000166
+This agrees with https://oeis.org/A000166 which describes this sequence.
+
+We are not tracking how many times we had to shuffle.  We can assume it's not too many times since, so far, we were able to perform draws quite quickly.  But will it get a lot harder as we have more players?  Counting the shuffles and timing gives:
+
+    10 players took 29ms and performed 7 shuffles
+    100 players took 0ms and performed 1 shuffles
+    1000 players took 9ms and performed 5 shuffles
+    10000 players took 36ms and performed 3 shuffles
+    100000 players took 172ms and performed 4 shuffles
+    1000000 players took 1822ms and performed 2 shuffles
+    10000000 players took 158218ms and performed 6 shuffles
+    
+It doesn't become harder to find derangements so we never need to shuffle many times but it does become harder to shuffle.  On the last one my laptop was thrashing.  
