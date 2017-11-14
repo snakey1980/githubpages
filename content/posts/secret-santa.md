@@ -115,4 +115,65 @@ We run it 100,000 times and would expect each pattern to occur around 11111 time
     [(1, 3), (2, 1), (3, 4), (4, 2)]=9532
     [(1, 2), (2, 3), (3, 4), (4, 1)]=6509
     
-The algorithm is biased.  To see why
+The algorithm is biased.  We are giving special treatment to the last pick and this is skewing everything.  What if we reject the draw as soon as we find an element in the wrong place:
+
+    fun draw3(players: Set<Int>) : List<Pair<Int, Int>> {
+        class BadPotException : RuntimeException()
+        if (players.size < 4) throw IllegalArgumentException()
+        while (true) {
+            val pot = players.toMutableList()
+            Collections.shuffle(pot)
+            try {
+                val result = mutableListOf<Pair<Int, Int>>()
+                players.forEach {
+                    if (pot[0] == it) {
+                        throw BadPotException()
+                    }
+                    result.add(Pair(it, pot.removeAt(0)))
+                }
+                return result
+            }
+            catch (e: BadPotException) {
+                // ok, try again
+            }
+        }
+    }
+    
+We will be doing more work here, but the distribution looks better:
+
+    [(1, 2), (2, 4), (3, 1), (4, 3)]=11221
+    [(1, 4), (2, 3), (3, 1), (4, 2)]=11203
+    [(1, 3), (2, 1), (3, 4), (4, 2)]=11176
+    [(1, 4), (2, 1), (3, 2), (4, 3)]=11151
+    [(1, 3), (2, 4), (3, 1), (4, 2)]=11092
+    [(1, 3), (2, 4), (3, 2), (4, 1)]=11087
+    [(1, 4), (2, 3), (3, 2), (4, 1)]=11042
+    [(1, 2), (2, 3), (3, 4), (4, 1)]=11022
+    [(1, 2), (2, 1), (3, 4), (4, 3)]=11006
+    
+At this point let's forget the hat metaphor and more honestly represent what we are doing:
+
+    fun draw4(players: Set<Int>) : List<Pair<Int, Int>> {
+        if (players.size < 4) throw IllegalArgumentException()
+        val permutation = players.toMutableList()
+        do Collections.shuffle(permutation)
+            while (players.any { it == permutation[it - 1] })
+        return players.map { Pair(it, permutation[it - 1]) }
+    }
+    
+We are generating permutations of the players and rejecting them if they are not "derangements".  We found there were 9 derangements of 4 players.  Let's see how many we get for 5, 6 and 7 players:
+
+    for (i in 5..7) {
+        val patterns = mutableSetOf<List<Pair<Int, Int>>>()
+        (1..100_000).forEach {
+            val pattern = SecretSanta().draw4((1..i).toSet())
+            patterns.add(pattern)
+        }
+        println("Found ${patterns.size} derangements for $i players")
+    }
+    
+    Found 44 derangements for 5 players
+    Found 265 derangements for 6 players
+    Found 1854 derangements for 7 players
+    
+This agrees with https://oeis.org/A000166
