@@ -223,13 +223,13 @@ Seeing this graph made me think about a few things:
 
 First let's look at this particular graph.  So how likely was the 3 component to happen?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those.  Instead I sampled 10 million at random:
 
-          3 instances of 8 components out of 10,000,000 (ratio 0.000000)
-        554 instances of 7 components out of 10,000,000 (ratio 0.000055)
-      17683 instances of 6 components out of 10,000,000 (ratio 0.001768)
-     211913 instances of 5 components out of 10,000,000 (ratio 0.021191)
-    1156218 instances of 4 components out of 10,000,000 (ratio 0.115622)
-    1698725 instances of 1 components out of 10,000,000 (ratio 0.169873)
-    3090215 instances of 3 components out of 10,000,000 (ratio 0.309022)
-    3824689 instances of 2 components out of 10,000,000 (ratio 0.382469)
+          3 instances of 8 components (ratio 0.000000)
+        554 instances of 7 components (ratio 0.000055)
+      17683 instances of 6 components (ratio 0.001768)
+     211913 instances of 5 components (ratio 0.021191)
+    1156218 instances of 4 components (ratio 0.115622)
+    1698725 instances of 1 components (ratio 0.169873)
+    3090215 instances of 3 components (ratio 0.309022)
+    3824689 instances of 2 components (ratio 0.382469)
     
 So 3 components isn't very rare.  What about the particular pattern of a 8 node components, a 6 node and a 2 node?
