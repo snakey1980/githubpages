@@ -297,7 +297,7 @@ It's one of the less rare ones, and happens around 3% of the time.  For fun let'
     1 * 15 * 14 * 13 * 12 * 11 * 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 
         = 1307674368000
     
-So 1,307,674,368,000 ways to make the single cycle.  Divided by the total derangements number
+So 1,307,674,368,000 ways to make the single cycle.  Divided by the total number of possible derangements:
 
     1307674368000 / 7697064251745 =~ 0.169893
     
