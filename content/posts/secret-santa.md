@@ -232,7 +232,7 @@ First let's look at this particular graph.  So how likely was the 3 component to
     3090215 instances of 3 components (ratio 0.309022)
     3824689 instances of 2 components (ratio 0.382469)
     
-So 3 components isn't very rare.  What about the particular pattern of a 2 node components, a 6 node and an 2 node?  From another sample of 10 million:
+So 3 components isn't very rare.  The pairs on the other hand will hardly ever happen which is good as that would be a weird game.  What about the particular pattern of a 2 node components, a 6 node and an 2 node?  From another sample of 10 million:
 
           3 instances of [2, 2, 2, 2, 2, 2, 2, 2] (ratio 0.000000)
         145 instances of [2, 2, 2, 2, 2, 2, 4]    (ratio 0.000015)
@@ -290,4 +290,13 @@ So 3 components isn't very rare.  What about the particular pattern of a 2 node 
      971812 instances of [2, 14]                  (ratio 0.097181)
     1699299 instances of [16]                     (ratio 0.169930)
     
-It's one of the less rare ones, and happens around 3% of the time. 
+It's one of the less rare ones, and happens around 3% of the time.  For fun let's try and work out the probability of hitting the complete single cycle of 16 to see if it matches our experience sampling.  Any element can be "first" so we can say there is one way of picking it.  Then the first element can pair with any other but itself, so there are 15 ways of doing that.  Then the next just has to avoid the first and itself, so there are 14 ways of doing that.  The next has 13 ways.
+
+    15 * 14 * 13 * 12 * 11 * 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 = 1307674368000
+    
+So 1,307,674,368,000 ways to make the single cycle.  Divided by the total derangements number
+
+    1307674368000 / 7697064251745 =~ 0.169893
+    
+Close enough!
+    
