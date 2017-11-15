@@ -221,7 +221,7 @@ Seeing this graph made me think about a few things:
 2. It's possible we could have had one big cycle
 3. It's possible we could have had 8 pairs
 
-First let's look at this particular graph.  So how likely was the 3 component to happen?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those.  Instead I sampled 10 million instead:
+First let's look at this particular graph.  So how likely was the 3 component to happen?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those.  Instead I sampled 10 million at random:
 
           3 instances of 8 components out of 10,000,000 (ratio 0.000000)
         554 instances of 7 components out of 10,000,000 (ratio 0.000055)
