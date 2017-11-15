@@ -4,6 +4,8 @@ date: 2017-11-13T19:49:44-05:00
 draft: false
 ---
 
+Everything I never knew about Secret Santa...
+
 #### Names in a hat
 
 The first time I played Secret Santa we assigned givers/receivers like this:
@@ -11,7 +13,7 @@ The first time I played Secret Santa we assigned givers/receivers like this:
 1. Players put their name in a hat
 2. Players take turn to shake the hat and pick a name out at random.  If you pull your own name, put it back and pull again.
 
-So this is how I tried to implement it.  Here we use plain integers as the players:
+So when I decided to program it this is how I tried to do it.  Here we use plain integers as the players:
 
     fun draw(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
@@ -35,7 +37,7 @@ On a first try it seems to work:
     
 but try it a few times and, on some runs, it will never finish.  It's not hard to see why -- it's possible that when number 4 comes to choose, it finds only itself in the pot and reshuffles forever.
 
-This could happen in a real names-in-a-hat situation too.  When it does, there's nothing to be done but to put all the names back in and try again, so that's what I tried next:
+This could happen in a real names-in-a-hat situation too.  Has it ever happened to you?  When it does, there's nothing to be done but to put all the names back in and try again, so that's what I tried next:
 
     fun draw2(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
@@ -139,7 +141,7 @@ We will be doing more work here, but the distribution looks better:
 
 #### Derangements    
     
-At this point let's forget the hat metaphor and more honestly represent what we are doing:
+At this point let's forget the hat metaphor:
 
     fun draw4(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
@@ -169,7 +171,7 @@ Of course, just doing it 100,000 times doesn't mean we hit all of the possible d
 
     for (i in (4..11)) {
         val count = generatePermutations((0 until i).toList())
-                .filter { perm -> perm.none { perm.indexOf(it) == it } }.count()
+                .filter { perm -> (0 until i).none { perm[it] == it } }.count()
         println("Found $count derangements of $i elements")
     }
  
