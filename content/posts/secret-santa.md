@@ -13,8 +13,9 @@ The first time I played Secret Santa we assigned givers/receivers like this:
 
 So this is how I tried to implement it.  Here we use plain integers as the players:
 
-    fun draw(players: Set<Int>) : List<Pair<Int, Int>> {
-        if (players.size < 4) throw IllegalArgumentException()
+    fun draw(n: Int) : List<Pair<Int, Int>> {
+        if (n < 4) throw IllegalArgumentException()
+        val players = (1..n).toSet()
         val pot = players.toMutableList()
         Collections.shuffle(pot)
         val result = mutableListOf<Pair<Int, Int>>()
@@ -26,19 +27,20 @@ So this is how I tried to implement it.  Here we use plain integers as the playe
         }
         return result
     }
-    
+        
 On a first try it seems to work:
 
-    println(SecretSanta().draw(setOf(1, 2, 3, 4)))
+    println(SecretSanta().draw(4))
     // printed [(1, 4), (2, 1), (3, 2), (4, 3)]
     
 but try it a few times and, on some runs, it will never finish.  It's not hard to see why -- it's possible that when number 4 comes to choose, it finds only itself in the pot and reshuffles forever.
 
 This could happen in a real names-in-a-hat situation too.  When it does, there's nothing to be done but to put all the names back in and try again, so that's what I tried next:
 
-    fun draw2(players: Set<Int>) : List<Pair<Int, Int>> {
+    fun draw2(n: Int) : List<Pair<Int, Int>> {
+        if (n < 4) throw IllegalArgumentException()
+        val players = (1..n).toSet()
         class BadPotException : RuntimeException()
-        if (players.size < 4) throw IllegalArgumentException()
         while (true) {
             val pot = players.toMutableList()
             Collections.shuffle(pot)
@@ -63,7 +65,7 @@ This could happen in a real names-in-a-hat situation too.  When it does, there's
     
 This always seems to stop, so we are doing slightly better:
 
-    (1..100_000).forEach { SecretSanta().draw2(setOf(1, 2, 3, 4)) }
+    (1..100_000).forEach { SecretSanta().draw2(4) }
     
 With 4 players, there aren't many valid assignments, just these 9:
 
@@ -81,7 +83,7 @@ A good test would be to see if our procedure returns each of the nine, and that 
 
     val patterns = mutableMapOf<List<Pair<Int, Int>>, Int>()
     (1..100_000).forEach {
-        val pattern = SecretSanta().draw2(setOf(1, 2, 3, 4))
+        val pattern = SecretSanta().draw2(4)
         patterns[pattern] = patterns.getOrDefault(pattern, 0) + 1
     }
     patterns.entries.sortedByDescending { it.value }.forEach { println(it) }
@@ -100,9 +102,10 @@ We run it 100,000 times and would expect each pattern to occur around 11111 time
     
 The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  So, what if we reject the draw as soon as we find an element in the wrong place:
 
-    fun draw3(players: Set<Int>) : List<Pair<Int, Int>> {
+    fun draw3(n: Int) : List<Pair<Int, Int>> {
+        if (n < 4) throw IllegalArgumentException()
+        val players = (1..n).toSet()
         class BadPotException : RuntimeException()
-        if (players.size < 4) throw IllegalArgumentException()
         while (true) {
             val pot = players.toMutableList()
             Collections.shuffle(pot)
@@ -120,7 +123,7 @@ The algorithm is biased.  We are giving special treatment to the last pick and t
                 // ok, try again
             }
         }
-    }
+    }    
     
 We will be doing more work here, but the distribution looks better:
 
@@ -138,20 +141,21 @@ We will be doing more work here, but the distribution looks better:
     
 At this point let's forget the hat metaphor and more honestly represent what we are doing:
 
-    fun draw4(players: Set<Int>) : List<Pair<Int, Int>> {
-        if (players.size < 4) throw IllegalArgumentException()
+    fun draw4(n: Int) : List<Pair<Int, Int>> {
+        if (n < 4) throw IllegalArgumentException()
+        val players = (1..n).toSet()
         val permutation = players.toMutableList()
         do Collections.shuffle(permutation)
             while (players.any { it == permutation[it - 1] })
         return players.map { Pair(it, permutation[it - 1]) }
-    }
-    
+    } 
+       
 We are generating permutations of the players and rejecting them if they are not "derangements" (https://en.wikipedia.org/wiki/Derangement).  We found there were 9 derangements of 4 players.  Let's see how many we get for 5, 6 and 7 players:
 
     for (i in 5..7) {
         val patterns = mutableSetOf<List<Pair<Int, Int>>>()
         (1..100_000).forEach {
-            val pattern = SecretSanta().draw4((1..i).toSet())
+            val pattern = SecretSanta().draw4(i)
             patterns.add(pattern)
         }
         println("Found ${patterns.size} derangements for $i players")
@@ -161,7 +165,24 @@ We are generating permutations of the players and rejecting them if they are not
     Found 265 derangements for 6 players
     Found 1854 derangements for 7 players
     
-Of course, just doing it 100,000 times doesn't mean we hit all of the possible derangements.  But we can take a look at https://oeis.org/A000166 and see that we did indeed do it.  If we wanted to guarantee it we could generate all permutations and check them.
+Of course, just doing it 100,000 times doesn't mean we hit all of the possible derangements.  To check:
+
+    for (i in (4..11)) {
+        val count = generatePermutations((0 until i).toList())
+                .filter { perm -> perm.none { perm.indexOf(it) == it } }.count()
+        println("Found $count derangements of $i elements")
+    }
+ 
+    Found 9 derangements of 4 elements
+    Found 44 derangements of 5 elements
+    Found 265 derangements of 6 elements
+    Found 1854 derangements of 7 elements
+    Found 14833 derangements of 8 elements
+    Found 133496 derangements of 9 elements
+    Found 1334961 derangements of 10 elements
+    Found 14684570 derangements of 11 elements
+
+Generating permutations gets slow after 11 but we can see the sequence at https://oeis.org/A000166.
 
 We have not been tracking how many times we had to shuffle.  We can assume it's not too many times since, so far, we were able to perform draws quite quickly.  But will we have to shuffle more as we have more players?  Counting the shuffles and timing gives:
 
@@ -198,6 +219,4 @@ Seeing this graph made me think about a few things:
 2. It's possible we could have had one big cycle
 3. It's possible we could have had 8 pairs
 
-So how likely was the 3 component
-
-7,697,064,251,745
+First let's look at this particular graph.  So how likely was the 3 component to happen?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those. So let's do it by sampling instead:
