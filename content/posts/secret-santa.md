@@ -1,7 +1,7 @@
 ---
 title: "Secret Santa"
 date: 2017-11-13T19:49:44-05:00
-draft: true
+draft: false
 ---
 
 #### Names in a hat
@@ -88,7 +88,7 @@ A good test would be to see if our procedure returns each of the nine, and that 
     }
     patterns.entries.sortedByDescending { it.value }.forEach { println(it) }
         
-We run it 100,000 times and would expect each pattern to occur around 11111 times.  But:
+We run it 100,000 times and would expect each pattern to occur around 11,111 times.  But:
 
     [(1, 4), (2, 1), (3, 2), (4, 3)]=19241
     [(1, 2), (2, 4), (3, 1), (4, 3)]=13004
@@ -150,7 +150,7 @@ At this point let's forget the hat metaphor and more honestly represent what we 
         return players.map { Pair(it, permutation[it - 1]) }
     } 
        
-We are generating permutations of the players and rejecting them if they are not "derangements" (https://en.wikipedia.org/wiki/Derangement).  We found there were 9 derangements of 4 players.  Let's see how many we get for 5, 6 and 7 players:
+We are generating permutations of the players and rejecting them if they are not "derangements" (https://en.wikipedia.org/wiki/Derangement).  There were 9 derangements of 4 players.  Let's see how many we get for 5, 6 and 7 players:
 
     for (i in 5..7) {
         val patterns = mutableSetOf<List<Pair<Int, Int>>>()
@@ -182,7 +182,7 @@ Of course, just doing it 100,000 times doesn't mean we hit all of the possible d
     Found 1334961 derangements of 10 elements
     Found 14684570 derangements of 11 elements
 
-Generating permutations gets slow after 11 but we can see the sequence at https://oeis.org/A000166.
+I'm using a library Steinhaus–Johnson–Trotter algorithm to generate permutations and it gets slow after 11 but we can see the sequence continuing at https://oeis.org/A000166.
 
 We have not been tracking how many times we had to shuffle.  We can assume it's not too many times since, so far, we were able to perform draws quite quickly.  But will we have to shuffle more as we have more players?  Counting the shuffles and timing gives:
 
