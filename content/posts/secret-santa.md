@@ -18,14 +18,14 @@ So when I decided to program it this is how I tried to do it.  Here we use plain
     fun draw(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
         val players = (1..n).toSet()
-        val pot = players.toMutableList()
-        Collections.shuffle(pot)
+        val hat = players.toMutableList()
+        Collections.shuffle(hat)
         val result = mutableListOf<Pair<Int, Int>>()
         players.forEach {
-            while (pot[0] == it) {
-                Collections.shuffle(pot)
+            while (hat[0] == it) {
+                Collections.shuffle(hat)
             }
-            result.add(Pair(it, pot.removeAt(0)))
+            result.add(Pair(it, hat.removeAt(0)))
         }
         return result
     }
@@ -35,31 +35,31 @@ On a first try it seems to work:
     println(SecretSanta().draw(4))
     // printed [(1, 4), (2, 1), (3, 2), (4, 3)]
     
-but try it a few times and, on some runs, it will never finish.  It's not hard to see why -- it's possible that when number 4 comes to choose, it finds only itself in the pot and reshuffles forever.
+but try it a few times and, on some runs, it will never finish.  It's not hard to see why -- it's possible that when number 4 comes to choose, it finds only itself in the hat and reshuffles forever.
 
 This could happen in a real names-in-a-hat situation too.  Has it ever happened to you?  When it does, there's nothing to be done but to put all the names back in and try again, so that's what I tried next:
 
     fun draw2(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
         val players = (1..n).toSet()
-        class BadPotException : RuntimeException()
+        class BadHatException : RuntimeException()
         while (true) {
-            val pot = players.toMutableList()
-            Collections.shuffle(pot)
+            val hat = players.toMutableList()
+            Collections.shuffle(hat)
             try {
                 val result = mutableListOf<Pair<Int, Int>>()
                 players.forEach {
-                    if (pot.size == 1 && pot[0] == it) {
-                        throw BadPotException()
+                    if (hat.size == 1 && hat[0] == it) {
+                        throw BadHatException()
                     }
-                    while (pot[0] == it) {
-                        Collections.shuffle(pot)
+                    while (hat[0] == it) {
+                        Collections.shuffle(hat)
                     }
-                    result.add(Pair(it, pot.removeAt(0)))
+                    result.add(Pair(it, hat.removeAt(0)))
                 }
                 return result
             }
-            catch (e: BadPotException) {
+            catch (e: BadHatException) {
                 // ok, try again
             }
         }
@@ -107,21 +107,21 @@ The algorithm is biased.  We are giving special treatment to the last pick and t
     fun draw3(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
         val players = (1..n).toSet()
-        class BadPotException : RuntimeException()
+        class BadHatException : RuntimeException()
         while (true) {
-            val pot = players.toMutableList()
-            Collections.shuffle(pot)
+            val hat = players.toMutableList()
+            Collections.shuffle(hat)
             try {
                 val result = mutableListOf<Pair<Int, Int>>()
                 players.forEach {
-                    if (pot[0] == it) {
-                        throw BadPotException()
+                    if (hat[0] == it) {
+                        throw BadHatException()
                     }
-                    result.add(Pair(it, pot.removeAt(0)))
+                    result.add(Pair(it, hat.removeAt(0)))
                 }
                 return result
             }
-            catch (e: BadPotException) {
+            catch (e: BadHatException) {
                 // ok, try again
             }
         }
