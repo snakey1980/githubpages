@@ -13,7 +13,7 @@ The first time I played Secret Santa we assigned givers and receivers like so:
 1. Put the names of all the players in a hat
 2. Take turns to shake the hat and pick a name out at random.  If you pick your own name, put it back and pick again.
 
-So when I decided to program it this is how I tried to do it.  Here we use plain integers as the players:
+So when I decided to program it this is how I tried to do it.  Here we use integers as the players and they get paired up in giver, receiver pairs:
 
     fun draw(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
