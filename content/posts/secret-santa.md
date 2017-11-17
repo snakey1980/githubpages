@@ -198,7 +198,7 @@ We have not been tracking how many times we had to shuffle.  We can assume it's 
      1000000 players took   1822ms and performed 2 shuffles
     10000000 players took 158218ms and performed 6 shuffles
     
-We don't have to shuffle more, but shuffling itself takes longer as we add players.  On the last one my laptop lost its mind.  So the lack of shuffling suggests that derangements remain fairly common even as the number of permutations goes through the roof (there are n! permutations of n elements).  [It turns out](hthttps://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) that the ratio of permutations to derangements tends to 1/e as n approaches infinity.  So we don't need to worry about that.
+We don't have to shuffle more, but shuffling itself takes longer as we add players.  So the lack of shuffling suggests that derangements remain fairly common even as the number of permutations goes through the roof (there are n! permutations of n elements).  [It turns out](https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) that the ratio of permutations to derangements ends up approximately 1/e.
 
 #### Cycles
 
@@ -301,7 +301,35 @@ So 1,307,674,368,000 ways to make the single cycle.  Divided by the total number
 
     1307674368000 / 7697064251745 =~ 0.169893
     
-Close enough.
+Close enough.  What about the probability of hitting the 8 cycle assignment.  How to count these ways?  I came up with this way to count the number of possible pairings for n players:
+
+    fun countPairedPermutations(n: Int) : Int {
+        if (n < 4 || (n % 2) != 0) {
+            throw IllegalArgumentException()
+        }
+        if (n == 4) {
+            return 3
+        }
+        else {
+            return (n - 1) * (countPairedPermutations(n - 2))
+        }
+    }
+
+The idea of the recursion is that the first element can be mapped to any of the remaining n - 1 elements, so there are n - 1 different ways to do that.  Each of those ways then has the n - 2 case number of ways to continue.  This produces:
+
+    4  ->       3
+    6  ->      15
+    8  ->     105
+    10 ->     945
+    12 ->   10395
+    14 ->  135135
+    16 -> 2027025
+    
+This appears to be [this sequence](https://oeis.org/A001147), though I couldn't make sense of the descriptions there.  The figure 2027025 gives the actual probability for the 8 pairs of 16 players as:
+
+    2027025 / 7697064251745 =~ 2.63 / 10 million
+    
+So finding three earlier was just right!  With more time on the train just now I ran 100 million and got 28.  Shout out to anyone who has experienced paired up Secret Santas with a large number of players -- I hope you de-anonymised it and found out how lucky you were!
 
 #### Back to the hat
 
@@ -330,7 +358,7 @@ So far I didn't worry about shuffling, I just used a library shuffle.  What if I
         return list
     }    
     
-This is a Fisher-Yates shuffle.  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).  One failed attempt led me to the following:
+This is a (Fisher-Yates shuffle)[https://en.wikipedia.org/wiki/Fisher–Yates_shuffle].  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).  One failed attempt led me to the following:
 
     fun derange(n: Int, random: Random) : List<Int> {
         val list = (1..n).toMutableList()
