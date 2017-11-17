@@ -1,1 +1,1 @@
-cp -r public/* ../snakey1980.github.io/
+hugo && cp -r public/* ../snakey1980.github.io/
