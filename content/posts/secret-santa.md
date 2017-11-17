@@ -17,7 +17,7 @@ So when I decided to program it this is how I tried to do it.  Here we use integ
 
     fun draw(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
-        val players = (1..n).toSet()
+        val players = (1..n)
         val hat = players.toMutableList()
         Collections.shuffle(hat)
         val result = mutableListOf<Pair<Int, Int>>()
@@ -41,7 +41,7 @@ This could happen in a real names-in-a-hat situation too.  Has it ever happened 
 
     fun draw2(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
-        val players = (1..n).toSet()
+        val players = (1..n)
         class BadHatException : RuntimeException()
         while (true) {
             val hat = players.toMutableList()
@@ -106,7 +106,7 @@ The algorithm is biased.  We are giving special treatment to the last pick and t
 
     fun draw3(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
-        val players = (1..n).toSet()
+        val players = (1..n)
         class BadHatException : RuntimeException()
         while (true) {
             val hat = players.toMutableList()
@@ -147,7 +147,7 @@ At this point let's forget the hat metaphor:
 
     fun draw4(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
-        val players = (1..n).toSet()
+        val players = (1..n)
         val permutation = players.toMutableList()
         do Collections.shuffle(permutation)
             while (players.any { it == permutation[it - 1] })
@@ -301,6 +301,21 @@ So 1,307,674,368,000 ways to make the single cycle.  Divided by the total number
 
     1307674368000 / 7697064251745 =~ 0.169893
     
-Close enough!
+Close enough.
+
+#### Back to the hat
+
+Back in the real world, we still have a problem in that the hat method has become annoying to implement, what with the high probability of telling people to restart multiple times.  There's a real world method described [in this video](https://www.youtube.com/watch?v=GhnCj7Fvqt0) which can come up with a valid assignment in one pass.  The idea is you shuffle once and then each participant is assigned to its neighbour in the shuffle with the last in line looping around to be assigned to the first.  The video explains how to make this work with real people and paper.  In code it looks like:
+
+    fun draw5(n: Int) : List<Pair<Int, Int>> {
+        if (n < 4) throw IllegalArgumentException()
+        val players = (1..n)
+        val permutation = players.toMutableList()
+        return (0 until n).map { 
+            Pair(permutation[it], permutation[(it + 1) % n])
+        }
+    }
+
+It's guaranteed to create a derangement and it's uniformly random over its possibilities.  A problem is that the possibilities themselves are restricted to complete cycles, meaning that we would be missing most derangements.  This might not matter if everyone is getting bubble bath and no one cares to guess who got what, but it somewhat spoils the detective work part.  On the other hand, a cycle is quite pleasing.  I did not adopt this method for my program.
 
 My Secret Santa program is [here](https://github.com/snakey1980/secretsanta).
