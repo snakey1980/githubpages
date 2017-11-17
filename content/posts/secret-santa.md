@@ -322,15 +322,24 @@ It's guaranteed to create a derangement and it's uniformly random over its possi
 
 So far I didn't worry about shuffling, I just used a library shuffle.  What if I write my own shuffle and adapt it to avoid non-derangements?  Then I could avoid ever reshuffling.  The shuffle I was using, java.util.Collections.shuffle, does something like this:
 
-    fun shuffle(list: MutableList<Int>, random: Random) {
-        fun swap(list: MutableList<Int>, i: Int, j: Int) {
-            list.set(i, list.set(j, list[i]))
-        }
+    fun shuffle(n: Int, random: Random) : List<Int> {
+        val list = (1..n).toMutableList()
         for (i in list.size downTo 2) {
-            swap(list, i - 1, random.nextInt(i))
+            list.set(i - 1, list.set(random.nextInt(i), list[i - 1]))
         }
+        return list
     }    
     
-This is a modern Fisher-Yates shuffle.  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).
+This is a modern Fisher-Yates shuffle.  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).  One failed attempt is the following:
+
+    fun derange(n: Int, random: Random) : List<Int> {
+        val list = (1..n).toMutableList()
+        for (i in list.size downTo 2) {
+            list.set(i - 1, list.set(random.nextInt(i - 1), list[i - 1]))
+        }
+        return list
+    }
+    
+which does produce valid derangements, but only complete cycles.  This is called (Sattolo's algorithm)[https://danluu.com/sattolo/] and would be an alternative to the draw5() method above.
 
 My Secret Santa program is [here](https://github.com/snakey1980/secretsanta).
