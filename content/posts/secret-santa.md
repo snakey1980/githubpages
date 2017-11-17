@@ -318,4 +318,19 @@ Back in the real world, we still have a problem in that the hat method has becom
 
 It's guaranteed to create a derangement and it's uniformly random over its possibilities.  A problem is that the possibilities themselves are restricted to complete cycles, meaning that we would be missing most derangements.  This might not matter if everyone is getting bubble bath and no one cares to guess who got what, but it somewhat spoils the detective work part.  On the other hand, a cycle is quite pleasing.  I did not adopt this method for my program.
 
+#### Smarter shuffling
+
+So far I didn't worry about shuffling, I just used a library shuffle.  What if I write my own shuffle and adapt it to avoid non-derangements?  Then I could avoid ever reshuffling.  The shuffle I was using, java.util.Collections.shuffle, does something like this:
+
+    fun shuffle(list: MutableList<Int>, random: Random) {
+        fun swap(list: MutableList<Int>, i: Int, j: Int) {
+            list.set(i, list.set(j, list[i]))
+        }
+        for (i in list.size downTo 2) {
+            swap(list, i - 1, random.nextInt(i))
+        }
+    }    
+    
+This is a modern Fisher-Yates shuffle.  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).
+
 My Secret Santa program is [here](https://github.com/snakey1980/secretsanta).
