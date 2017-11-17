@@ -340,6 +340,6 @@ This is a modern Fisher-Yates shuffle.  My attempts to adapt it didn't end well 
         return list
     }
     
-which does produce valid derangements, but only complete cycles.  This is called (Sattolo's algorithm)[https://danluu.com/sattolo/] and would be an alternative to the draw5() method above.
+which does produce valid derangements, but only complete cycles.  This is called [Sattolo's algorithm](https://danluu.com/sattolo/) and would be an alternative to the draw5() method above.
 
 My Secret Santa program is [here](https://github.com/snakey1980/secretsanta).
