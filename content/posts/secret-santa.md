@@ -358,7 +358,7 @@ So far I didn't worry about shuffling, I just used a library shuffle.  What if I
         return list
     }    
     
-This is a (Fisher-Yates shuffle)[https://en.wikipedia.org/wiki/Fisher–Yates_shuffle].  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).  One failed attempt led me to the following:
+This is a [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher–Yates_shuffle).  My attempts to adapt it didn't end well and it seems this is a [tricky problem](https://stackoverflow.com/questions/7279895/shuffle-list-ensuring-that-no-item-remains-in-same-position).  One failed attempt led me to the following:
 
     fun derange(n: Int, random: Random) : List<Int> {
         val list = (1..n).toMutableList()
