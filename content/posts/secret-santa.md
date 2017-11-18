@@ -329,7 +329,7 @@ This appears to be [this sequence](https://oeis.org/A001147), though I couldn't 
 
     2027025 / 7697064251745 =~ 2.63 / 10 million
     
-So finding three earlier was just right!  With more time on the train just now I ran 100 million and got 28.  Shout out to anyone who has experienced paired up Secret Santas with a large number of players -- I hope you de-anonymised it and found out how lucky you were!
+So finding three earlier was just right!  With more time on the train just now I ran 100 million and got 28.  Shout out to anyone who has experienced paired up Secret Santas with a large number of players -- I hope you deanonymized it and found out how lucky you were!
 
 #### Back to the hat
 
