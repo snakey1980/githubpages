@@ -198,7 +198,7 @@ We have not been tracking how many times we had to shuffle.  We can assume it's 
      1000000 players took   1822ms and performed 2 shuffles
     10000000 players took 158218ms and performed 6 shuffles
     
-We don't have to shuffle more, but shuffling itself takes longer as we add players.  So the lack of shuffling suggests that derangements remain fairly common even as the number of permutations goes through the roof (there are n! permutations of n elements).  [It turns out](https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) that the ratio of permutations to derangements ends up approximately 1/e.
+We don't have to shuffle more, but shuffling itself takes longer as we add players.  So the lack of extra shuffling suggests that chances of hitting a derangement remain about the same even as the number of permutations goes through the roof (there are n! permutations of n elements).  [It turns out](https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) that the ratio of permutations to derangements ends up approximately 1/e.
 
 #### Cycles
 
@@ -344,7 +344,7 @@ Back in the real world, we still have a problem in that the hat method has becom
         }
     }
 
-It's guaranteed to create a derangement and it's uniformly random over its possibilities.  A problem is that the possibilities themselves are restricted to complete cycles, meaning that we would be missing most derangements.  This might not matter if everyone is getting bubble bath and no one cares to guess who got what, but it somewhat spoils the detective work part.  On the other hand, a cycle is quite pleasing.  I did not adopt this method for my program.
+It's guaranteed to create a derangement and it's uniformly random over its possibilities.  A problem is that the possibilities themselves are restricted to complete cycles, meaning that we would be missing most derangements.  This might not matter if everyone is getting bubble bath and no one cares to guess who got what, but if you enjoy the detective work part then it's less fun this way.  On the other hand, a cycle is quite pleasing.  I did not adopt this method for my program.
 
 #### Smarter shuffling
 
