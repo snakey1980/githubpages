@@ -370,4 +370,99 @@ This is a [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher–Yates_sh
     
 which does produce valid derangements, but only complete cycles.  This is called [Sattolo's algorithm](https://danluu.com/sattolo/) and would be an alternative to the draw5() method above.
 
+There is an algorithm described [here](http://epubs.siam.org/doi/pdf/10.1137/1.9781611972986.7) which does produce random derangements.  Here it is more or less as described in the paper:
+
+    fun randomDerangement(n: Int) : List<Int> {
+        fun numDerangements(n: Int): BigDecimal {
+            return when (n) {
+                0 -> BigDecimal.ONE
+                1 -> BigDecimal.ZERO
+                else -> BigDecimal.valueOf(n.toLong()).minus(BigDecimal.ONE)
+                    .multiply(numDerangements(n - 1).plus(numDerangements(n - 2)))
+            }
+        }
+        val random = Random()
+        val A = (1..n).toMutableList()
+        val marked = (0 until n).map { false }.toBooleanArray()
+        var i = n - 1
+        var u = n
+        while (u >= 2) {
+            if (!marked[i]) {
+                var j = random.nextInt(i)
+                while (marked[j]) {
+                    j = random.nextInt(i)
+                }
+                A[i] = A.set(j, A[i])
+                val p = random.nextDouble()
+                val threshold =
+                        BigDecimal.valueOf((u - 1).toLong())
+                        .multiply(numDerangements(u - 2))
+                        .divide(numDerangements(u), MathContext.DECIMAL64).toDouble()
+                if (p < threshold) {
+                    marked[j] = true
+                    u--
+                }
+                u--
+            }
+            i--
+        }
+        return A
+    }
+    
+The key insight is to work out the probability that an exchanged element should subsequently remain fixed (these are the "marked" indices), such that all derangements end up equally likely.  This probability is related to the number of possible derangements which we calculate using the recursion also discussed in the paper.  There's a trial and reject loop in the middle to select the next unfixed element to swap with.  In my version I keep the unmarked indices in a set to avoid the trial and reject method.  I am also memoizing the derangement counts:
+
+    object RandomDerangementCalculator {
+
+        private val random = Random()
+        private val derangementCounts = mutableMapOf<Int, BigDecimal>()
+    
+        private fun derangementCount(n: Int) : BigDecimal {
+            return derangementCounts.getOrPut(n, {
+                when (n) {
+                    0 -> BigDecimal.ONE
+                    1 -> BigDecimal.ZERO
+                    else -> BigDecimal.valueOf(n.toLong())
+                            .minus(BigDecimal.ONE)
+                            .multiply(
+                                    derangementCount(n - 1)
+                                    .plus(derangementCount(n - 2)))
+                }
+            })
+        }
+    
+        private fun Set<Int>.nth(n: Int) : Int {
+            if (this.size < n || n < 0) {
+                throw IllegalArgumentException()
+            }
+            var i = 0
+            return this.stream().dropWhile { i++ < n }.findFirst().get()
+        }
+    
+        fun derange(n: Int) : List<Int> {
+            val result = (1..n).toMutableList()
+            val unmarkedIndices = (0 until n).toMutableSet()
+            for (i in n - 1 downTo 0) {
+                if (unmarkedIndices.size < 2) {
+                    break
+                }
+                if (unmarkedIndices.contains(i)) {
+                    var j = unmarkedIndices.nth(random.nextInt(unmarkedIndices.size - 1))
+                    result[i] = result.set(j, result[i])
+                    val probability = random.nextDouble()
+                    val threshold =
+                            BigDecimal.valueOf((unmarkedIndices.size - 1).toLong())
+                                    .multiply(derangementCount(unmarkedIndices.size - 2))
+                                    .divide(derangementCount(unmarkedIndices.size), MathContext.DECIMAL64).toDouble()
+                    if (probability < threshold) {
+                        unmarkedIndices.remove(j)
+                    }
+                    unmarkedIndices.remove(i)
+                }
+            }
+            return result
+        }
+    }
+
+This appears to be correct under some testing I did, but I did not adopt this method for my Secret Santa program.
+
 My Secret Santa program is [here](https://github.com/snakey1980/secretsanta).
