@@ -355,11 +355,12 @@ Back in the real world, we still have a problem in that the hat method has becom
         if (n < 4) throw IllegalArgumentException()
         val players = (1..n)
         val permutation = players.toMutableList()
-        return (0 until n).map { 
+        Collections.shuffle(permutation)
+        return (0 until n).map {
             Pair(permutation[it], permutation[(it + 1) % n])
         }
     }
-
+    
 It's guaranteed to create a derangement and it's uniformly random over its possibilities.  A problem is that the possibilities themselves are restricted to complete cycles, meaning that we would be missing most derangements.  This might not matter if everyone is getting bubble bath and no one cares to guess who got what, but if you enjoy the detective work part then it's less fun this way.  On the other hand, a cycle is quite pleasing.  I did not adopt this method for my program.
 
 #### Smarter shuffling
