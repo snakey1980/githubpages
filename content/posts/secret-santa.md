@@ -104,7 +104,7 @@ Pattern                          | Occurences
 (1, 3), (2, 1), (3, 4), (4, 2)   | 9532
 (1, 2), (2, 3), (3, 4), (4, 1)   | 6509
     
-The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  There is also an anonymity problem.  You gain information when you witness someone rejecting their own name and put it back.  In an extreme case, if the second-to-last person rejects their name, then you can be sure that the last persion will end up drawing the second-to-last.  So, what if we reject the draw as soon as we find an element in the wrong place and reshuffle the whole hat:
+The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  There is also an anonymity problem.  You gain information when you witness someone drawing their own name and putting it back.  In an extreme case, if the second-to-last person draws their name and puts it back, then you can be sure that the last persion will end up drawing the second-to-last.  So, what if we reject the draw as soon as we find an element in the wrong place and reshuffle the whole hat:
 
     fun draw3(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
