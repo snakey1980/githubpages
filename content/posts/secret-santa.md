@@ -92,15 +92,17 @@ A good test would be to see if our procedure returns each of the nine, and that 
         
 We run it 100,000 times and would expect each pattern to occur around 11,111 times.  But:
 
-    [(1, 4), (2, 1), (3, 2), (4, 3)]=19241
-    [(1, 2), (2, 4), (3, 1), (4, 3)]=13004
-    [(1, 2), (2, 1), (3, 4), (4, 3)]=12943
-    [(1, 3), (2, 4), (3, 2), (4, 1)]=9775
-    [(1, 4), (2, 3), (3, 1), (4, 2)]=9720
-    [(1, 4), (2, 3), (3, 2), (4, 1)]=9685
-    [(1, 3), (2, 4), (3, 1), (4, 2)]=9591
-    [(1, 3), (2, 1), (3, 4), (4, 2)]=9532
-    [(1, 2), (2, 3), (3, 4), (4, 1)]=6509
+Pattern                          | Occurences
+---------------------------------|------------
+[(1, 4), (2, 1), (3, 2), (4, 3)] | 19241
+[(1, 2), (2, 4), (3, 1), (4, 3)] | 13004
+[(1, 2), (2, 1), (3, 4), (4, 3)] | 12943
+[(1, 3), (2, 4), (3, 2), (4, 1)] | 9775
+[(1, 4), (2, 3), (3, 1), (4, 2)] | 9720
+[(1, 4), (2, 3), (3, 2), (4, 1)] | 9685
+[(1, 3), (2, 4), (3, 1), (4, 2)] | 9591
+[(1, 3), (2, 1), (3, 4), (4, 2)] | 9532
+[(1, 2), (2, 3), (3, 4), (4, 1)] | 6509
     
 The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  So, what if we reject the draw as soon as we find an element in the wrong place:
 
@@ -129,15 +131,17 @@ The algorithm is biased.  We are giving special treatment to the last pick and t
     
 We will be doing more work here, but the distribution looks better:
 
-    [(1, 2), (2, 4), (3, 1), (4, 3)]=11221
-    [(1, 4), (2, 3), (3, 1), (4, 2)]=11203
-    [(1, 3), (2, 1), (3, 4), (4, 2)]=11176
-    [(1, 4), (2, 1), (3, 2), (4, 3)]=11151
-    [(1, 3), (2, 4), (3, 1), (4, 2)]=11092
-    [(1, 3), (2, 4), (3, 2), (4, 1)]=11087
-    [(1, 4), (2, 3), (3, 2), (4, 1)]=11042
-    [(1, 2), (2, 3), (3, 4), (4, 1)]=11022
-    [(1, 2), (2, 1), (3, 4), (4, 3)]=11006
+Pattern                          | Occurences
+----------------------------------|------------
+[(1, 2), (2, 4), (3, 1), (4, 3)] | 11221
+[(1, 4), (2, 3), (3, 1), (4, 2)] | 11203
+[(1, 3), (2, 1), (3, 4), (4, 2)] | 11176
+[(1, 4), (2, 1), (3, 2), (4, 3)] | 11151
+[(1, 3), (2, 4), (3, 1), (4, 2)] | 11092
+[(1, 3), (2, 4), (3, 2), (4, 1)] | 11087
+[(1, 4), (2, 3), (3, 2), (4, 1)] | 11042
+[(1, 2), (2, 3), (3, 4), (4, 1)] | 11022
+[(1, 2), (2, 1), (3, 4), (4, 3)] | 11006
 
 You would never think to do it this way in a real names-in-a-hat situation but you'd need to if you wanted to be fair.
 
@@ -165,9 +169,11 @@ We are generating permutations of the players and rejecting them if they are not
         println("Found ${patterns.size} derangements for $i players")
     }
     
-    Found 44 derangements for 5 players
-    Found 265 derangements for 6 players
-    Found 1854 derangements for 7 players
+Players | Derangements
+--------|-------------
+5 | 44
+6  | 265
+7 | 1854
     
 Of course, just doing it 100,000 times doesn't mean we hit all of the possible derangements.  To check:
 
@@ -177,26 +183,30 @@ Of course, just doing it 100,000 times doesn't mean we hit all of the possible d
         println("Found $count derangements of $i elements")
     }
  
-    Found 9 derangements of 4 elements
-    Found 44 derangements of 5 elements
-    Found 265 derangements of 6 elements
-    Found 1854 derangements of 7 elements
-    Found 14833 derangements of 8 elements
-    Found 133496 derangements of 9 elements
-    Found 1334961 derangements of 10 elements
-    Found 14684570 derangements of 11 elements
-
+Players | Derangements
+--------|-------------
+4 | 9
+5 | 44
+6  | 265
+7 | 1854
+8 | 14833
+9 | 133496
+10 | 1334961
+11 | 14684570
+ 
 I'm using a library Steinhaus–Johnson–Trotter algorithm to generate permutations and it gets slow after 11 but we can see the sequence continuing in the [OEIS article](https://oeis.org/A000166).
 
 We have not been tracking how many times we had to shuffle.  We can assume it's not too many times since, so far, we were able to perform draws quite quickly.  But will we have to shuffle more as we have more players?  Counting the shuffles and timing gives:
 
-          10 players took     29ms and performed 7 shuffles
-         100 players took      0ms and performed 1 shuffles
-        1000 players took      9ms and performed 5 shuffles
-       10000 players took     36ms and performed 3 shuffles
-      100000 players took    172ms and performed 4 shuffles
-     1000000 players took   1822ms and performed 2 shuffles
-    10000000 players took 158218ms and performed 6 shuffles
+Players    | Time (ms) | Shuffles
+-----------|-----------|----------
+10         |   29   | 7 
+100        | 0      | 1
+1000       | 9      | 5
+10000      | 36     | 3
+100000     | 172    | 4
+1000000    | 1822   | 2
+10000000   | 158218 | 6
     
 We don't have to shuffle more, but shuffling itself takes longer as we add players.  So the lack of extra shuffling suggests that chances of hitting a derangement remain about the same even as the number of permutations goes through the roof (there are n! permutations of n elements).  [It turns out](https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) that the ratio of derangements to permutations ends up approximately 1/e.
 
@@ -225,72 +235,76 @@ Seeing this graph made me think about a few things:
 
 First let's look at this particular graph.  How likely was it that we would end up with 3 components?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those.  Instead I sampled 10 million at random:
 
-          3 instances of 8 components (ratio 0.000000)
-        554 instances of 7 components (ratio 0.000055)
-      17683 instances of 6 components (ratio 0.001768)
-     211913 instances of 5 components (ratio 0.021191)
-    1156218 instances of 4 components (ratio 0.115622)
-    1698725 instances of 1 components (ratio 0.169873)
-    3090215 instances of 3 components (ratio 0.309022)
-    3824689 instances of 2 components (ratio 0.382469)
+Components | Occurences | Ratio of total
+-----------|------------|----------------
+8 | 3           |     0.000000
+7 | 554         |     0.000055
+6 | 17683       |     0.001768
+5 |  211913     |     0.021191
+4 |    1156218  |     0.115622
+1 |   1698725   |     0.169873
+3 | 3090215     |     0.309022
+2 |  3824689    |     0.382469
     
 So 3 components is common.  The pairs on the other hand will hardly ever happen which is good as that would be a weird game.  What about the particular pattern of a 2 node components, a 6 node and an 8 node?  From a different sample of 10 million:
 
-          3 instances of [2, 2, 2, 2, 2, 2, 2, 2] (ratio 0.000000)
-        145 instances of [2, 2, 2, 2, 2, 2, 4]    (ratio 0.000015)
-        420 instances of [2, 2, 2, 2, 2, 3, 3]    (ratio 0.000042)
-       1185 instances of [2, 2, 2, 2, 2, 6]       (ratio 0.000119)
-       1755 instances of [2, 2, 3, 3, 3, 3]       (ratio 0.000176)
-       2197 instances of [2, 2, 2, 2, 4, 4]       (ratio 0.000220)
-       3584 instances of [3, 3, 3, 3, 4]          (ratio 0.000358)
-       4445 instances of [4, 4, 4, 4]             (ratio 0.000445)
-       4647 instances of [2, 2, 2, 2, 3, 5]       (ratio 0.000465)
-       8069 instances of [2, 2, 2, 3, 3, 4]       (ratio 0.000807)
-       8857 instances of [2, 2, 4, 4, 4]          (ratio 0.000886)
-       8879 instances of [2, 2, 2, 2, 8]          (ratio 0.000888)
-      11398 instances of [2, 2, 2, 5, 5]          (ratio 0.001140)
-      16774 instances of [2, 3, 3, 3, 5]          (ratio 0.001677)
-      23567 instances of [2, 2, 2, 4, 6]          (ratio 0.002357)
-      23729 instances of [2, 3, 3, 4, 4]          (ratio 0.002373)
-      23991 instances of [3, 3, 3, 7]             (ratio 0.002399)
-      27059 instances of [2, 2, 2, 3, 7]          (ratio 0.002706)
-      30141 instances of [3, 3, 5, 5]             (ratio 0.003014)
-      31520 instances of [2, 2, 3, 3, 6]          (ratio 0.003152)
-      47000 instances of [2, 2, 6, 6]             (ratio 0.004700)
-      56214 instances of [3, 4, 4, 5]             (ratio 0.005621)
-      56321 instances of [2, 2, 2, 10]            (ratio 0.005632)
-      56515 instances of [2, 2, 3, 4, 5]          (ratio 0.005652)
-      62915 instances of [3, 3, 4, 6]             (ratio 0.006292)
-      68133 instances of [2, 4, 5, 5]             (ratio 0.006813)
-      70954 instances of [2, 4, 4, 6]             (ratio 0.007095)
-      90871 instances of [5, 5, 6]                (ratio 0.009087)
-      94380 instances of [4, 6, 6]                (ratio 0.009438)
-      94532 instances of [2, 3, 3, 8]             (ratio 0.009453)
-      96845 instances of [2, 2, 5, 7]             (ratio 0.009685)
-     106051 instances of [4, 4, 8]                (ratio 0.010605)
-     106113 instances of [2, 2, 4, 8]             (ratio 0.010611)
-     126166 instances of [2, 2, 3, 9]             (ratio 0.012617)
-     138703 instances of [2, 7, 7]                (ratio 0.013870)
-     150604 instances of [2, 3, 5, 6]             (ratio 0.015060)
-     150766 instances of [3, 3, 10]               (ratio 0.015077)
-     162452 instances of [2, 3, 4, 7]             (ratio 0.016245)
-     194590 instances of [4, 5, 7]                (ratio 0.019459)
-     212145 instances of [8, 8]                   (ratio 0.021215)
-     215861 instances of [3, 6, 7]                (ratio 0.021586)
-     227178 instances of [3, 5, 8]                (ratio 0.022718)
-     251454 instances of [3, 4, 9]                (ratio 0.025145)
-     282413 instances of [2, 6, 8]                (ratio 0.028241)
-     282690 instances of [2, 2, 12]               (ratio 0.028269)
-     301765 instances of [2, 5, 9]                (ratio 0.030177)
-     340009 instances of [2, 4, 10]               (ratio 0.034001)
-     411921 instances of [2, 3, 11]               (ratio 0.041192)
-     431182 instances of [7, 9]                   (ratio 0.043118)
-     453110 instances of [6, 10]                  (ratio 0.045311)
-     494113 instances of [5, 11]                  (ratio 0.049411)
-     566147 instances of [4, 12]                  (ratio 0.056615)
-     696411 instances of [3, 13]                  (ratio 0.069641)
-     971812 instances of [2, 14]                  (ratio 0.097181)
-    1699299 instances of [16]                     (ratio 0.169930)
+Pattern | Occurences | Ratio of total
+--------|------------|----------------
+[2, 2, 2, 2, 2, 2, 2, 2] |        3  |   0.000000
+[2, 2, 2, 2, 2, 2, 4]    |      145  |   0.000015
+[2, 2, 2, 2, 2, 3, 3]    |      420  |   0.000042
+[2, 2, 2, 2, 2, 6]       |     1185  |   0.000119
+[2, 2, 3, 3, 3, 3]       |     1755  |   0.000176
+[2, 2, 2, 2, 4, 4]       |     2197  |   0.000220
+[3, 3, 3, 3, 4]          |     3584  |   0.000358
+[4, 4, 4, 4]             |     4445  |   0.000445
+[2, 2, 2, 2, 3, 5]       |     4647  |   0.000465
+[2, 2, 2, 3, 3, 4]       |     8069  |   0.000807
+[2, 2, 4, 4, 4]          |     8857  |   0.000886
+[2, 2, 2, 2, 8]          |     8879  |   0.000888
+[2, 2, 2, 5, 5]          |    11398  |   0.001140
+[2, 3, 3, 3, 5]          |    16774  |   0.001677
+[2, 2, 2, 4, 6]          |    23567  |   0.002357
+[2, 3, 3, 4, 4]          |    23729  |   0.002373
+[3, 3, 3, 7]             |    23991  |   0.002399
+[2, 2, 2, 3, 7]          |    27059  |   0.002706
+[3, 3, 5, 5]             |    30141  |   0.003014
+[2, 2, 3, 3, 6]          |    31520  |   0.003152
+[2, 2, 6, 6]             |    47000  |   0.004700
+[3, 4, 4, 5]             |    56214  |   0.005621
+[2, 2, 2, 10]            |    56321  |   0.005632
+[2, 2, 3, 4, 5]          |    56515  |   0.005652
+[3, 3, 4, 6]             |    62915  |   0.006292
+[2, 4, 5, 5]             |    68133  |   0.006813
+[2, 4, 4, 6]             |    70954  |   0.007095
+[5, 5, 6]                |    90871  |   0.009087
+[4, 6, 6]                |    94380  |   0.009438
+[2, 3, 3, 8]             |    94532  |   0.009453
+[2, 2, 5, 7]             |    96845  |   0.009685
+[4, 4, 8]                |   106051  |   0.010605
+[2, 2, 4, 8]             |   106113  |   0.010611
+[2, 2, 3, 9]             |   126166  |   0.012617
+[2, 7, 7]                |   138703  |   0.013870
+[2, 3, 5, 6]             |   150604  |   0.015060
+[3, 3, 10]               |   150766  |   0.015077
+[2, 3, 4, 7]             |   162452  |   0.016245
+[4, 5, 7]                |   194590  |   0.019459
+[8, 8]                   |   212145  |   0.021215
+[3, 6, 7]                |   215861  |   0.021586
+[3, 5, 8]                |   227178  |   0.022718
+[3, 4, 9]                |   251454  |   0.025145
+[2, 6, 8]                |   282413  |   0.028241
+[2, 2, 12]               |   282690  |   0.028269
+[2, 5, 9]                |   301765  |   0.030177
+[2, 4, 10]               |   340009  |   0.034001
+[2, 3, 11]               |   411921  |   0.041192
+[7, 9]                   |   431182  |   0.043118
+[6, 10]                  |   453110  |   0.045311
+[5, 11]                  |   494113  |   0.049411
+[4, 12]                  |   566147  |   0.056615
+[3, 13]                  |   696411  |   0.069641
+[2, 14]                  |   971812  |   0.097181
+[16]                     |  1699299  |   0.169930
     
 It's one of the less rare ones, and happens around 3% of the time.  For fun let's try and work out the probability of hitting the complete single cycle of 16 to see if it matches our experience sampling.  To make the complete cycle, any element can be "first" so we can say there is one way of picking it.  Then the first element can pair with any other but itself, so there are 15 ways of doing that.  Then the next just has to avoid the first and itself, so there are 14 ways of doing that.  The next has 13 then 12 then 11 all the way to the last element which can only match to the first.
 
@@ -317,13 +331,15 @@ Close enough.  What about the probability of hitting the 8 cycle assignment.  Ho
 
 The idea of the recursion is that the first element can be mapped to any of the remaining n - 1 elements, so there are n - 1 different ways to do that.  Each of those ways then has the n - 2 case number of ways to continue.  This produces:
 
-    4  ->       3
-    6  ->      15
-    8  ->     105
-    10 ->     945
-    12 ->   10395
-    14 ->  135135
-    16 -> 2027025
+Players | Paired derangements
+--------|----------------
+ 4   |        3
+    6   |       15
+    8   |      105
+    10  |      945
+    12  |    10395
+    14  |   135135
+    16  |  2027025
     
 This appears to be [this sequence](https://oeis.org/A001147), though I couldn't make sense of the descriptions there.  The figure 2027025 gives the actual probability for the 8 pairs of 16 players as:
 
