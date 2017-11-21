@@ -71,15 +71,15 @@ This always seems to stop, so we are doing slightly better:
     
 With 4 players, there aren't many valid assignments, just these 9:
 
-    [(1, 2), (2, 1), (3, 4), (4, 3)]
-    [(1, 2), (2, 3), (3, 4), (4, 1)]
-    [(1, 2), (2, 4), (3, 1), (4, 3)]
-    [(1, 3), (2, 1), (3, 4), (4, 2)]
-    [(1, 3), (2, 4), (3, 1), (4, 2)]
-    [(1, 3), (2, 4), (3, 2), (4, 1)]
-    [(1, 4), (2, 1), (3, 2), (4, 3)]
-    [(1, 4), (2, 3), (3, 1), (4, 2)]
-    [(1, 4), (2, 3), (3, 2), (4, 1)]
+    (1, 2), (2, 1), (3, 4), (4, 3)
+    (1, 2), (2, 3), (3, 4), (4, 1)
+    (1, 2), (2, 4), (3, 1), (4, 3)
+    (1, 3), (2, 1), (3, 4), (4, 2)
+    (1, 3), (2, 4), (3, 1), (4, 2)
+    (1, 3), (2, 4), (3, 2), (4, 1)
+    (1, 4), (2, 1), (3, 2), (4, 3)
+    (1, 4), (2, 3), (3, 1), (4, 2)
+    (1, 4), (2, 3), (3, 2), (4, 1)
     
 A good test would be to see if our procedure returns each of the nine, and that it returns each one 1/9 of the time:
 
@@ -93,16 +93,16 @@ A good test would be to see if our procedure returns each of the nine, and that 
 We run it 100,000 times and would expect each pattern to occur around 11,111 times.  But:
 
 Pattern                          | Occurences
----------------------------------|------------
-[(1, 4), (2, 1), (3, 2), (4, 3)] | 19241
-[(1, 2), (2, 4), (3, 1), (4, 3)] | 13004
-[(1, 2), (2, 1), (3, 4), (4, 3)] | 12943
-[(1, 3), (2, 4), (3, 2), (4, 1)] | 9775
-[(1, 4), (2, 3), (3, 1), (4, 2)] | 9720
-[(1, 4), (2, 3), (3, 2), (4, 1)] | 9685
-[(1, 3), (2, 4), (3, 1), (4, 2)] | 9591
-[(1, 3), (2, 1), (3, 4), (4, 2)] | 9532
-[(1, 2), (2, 3), (3, 4), (4, 1)] | 6509
+---------------------------------|-----------
+(1, 4), (2, 1), (3, 2), (4, 3)   | 19241
+(1, 2), (2, 4), (3, 1), (4, 3)   | 13004
+(1, 2), (2, 1), (3, 4), (4, 3)   | 12943
+(1, 3), (2, 4), (3, 2), (4, 1)   | 9775
+(1, 4), (2, 3), (3, 1), (4, 2)   | 9720
+(1, 4), (2, 3), (3, 2), (4, 1)   | 9685
+(1, 3), (2, 4), (3, 1), (4, 2)   | 9591
+(1, 3), (2, 1), (3, 4), (4, 2)   | 9532
+(1, 2), (2, 3), (3, 4), (4, 1)   | 6509
     
 The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  So, what if we reject the draw as soon as we find an element in the wrong place:
 
@@ -132,16 +132,16 @@ The algorithm is biased.  We are giving special treatment to the last pick and t
 We will be doing more work here, but the distribution looks better:
 
 Pattern                          | Occurences
-----------------------------------|------------
-[(1, 2), (2, 4), (3, 1), (4, 3)] | 11221
-[(1, 4), (2, 3), (3, 1), (4, 2)] | 11203
-[(1, 3), (2, 1), (3, 4), (4, 2)] | 11176
-[(1, 4), (2, 1), (3, 2), (4, 3)] | 11151
-[(1, 3), (2, 4), (3, 1), (4, 2)] | 11092
-[(1, 3), (2, 4), (3, 2), (4, 1)] | 11087
-[(1, 4), (2, 3), (3, 2), (4, 1)] | 11042
-[(1, 2), (2, 3), (3, 4), (4, 1)] | 11022
-[(1, 2), (2, 1), (3, 4), (4, 3)] | 11006
+---------------------------------|-----------
+(1, 2), (2, 4), (3, 1), (4, 3)   | 11221
+(1, 4), (2, 3), (3, 1), (4, 2)   | 11203
+(1, 3), (2, 1), (3, 4), (4, 2)   | 11176
+(1, 4), (2, 1), (3, 2), (4, 3)   | 11151
+(1, 3), (2, 4), (3, 1), (4, 2)   | 11092
+(1, 3), (2, 4), (3, 2), (4, 1)   | 11087
+(1, 4), (2, 3), (3, 2), (4, 1)   | 11042
+(1, 2), (2, 3), (3, 4), (4, 1)   | 11022
+(1, 2), (2, 1), (3, 4), (4, 3)   | 11006
 
 You would never think to do it this way in a real names-in-a-hat situation but you'd need to if you wanted to be fair.
 
@@ -171,9 +171,9 @@ We are generating permutations of the players and rejecting them if they are not
     
 Players | Derangements
 --------|-------------
-5 | 44
-6  | 265
-7 | 1854
+5       | 44
+6       | 265
+7       | 1854
     
 Of course, just doing it 100,000 times doesn't mean we hit all of the possible derangements.  To check:
 
@@ -185,30 +185,47 @@ Of course, just doing it 100,000 times doesn't mean we hit all of the possible d
  
 Players | Derangements
 --------|-------------
-4 | 9
-5 | 44
-6  | 265
-7 | 1854
-8 | 14833
-9 | 133496
-10 | 1334961
-11 | 14684570
+4       | 9
+5       | 44
+6       | 265
+7       | 1854
+8       | 14833
+9       | 133496
+10      | 1334961
+11      | 14684570
  
 I'm using a library Steinhaus–Johnson–Trotter algorithm to generate permutations and it gets slow after 11 but we can see the sequence continuing in the [OEIS article](https://oeis.org/A000166).
 
 We have not been tracking how many times we had to shuffle.  We can assume it's not too many times since, so far, we were able to perform draws quite quickly.  But will we have to shuffle more as we have more players?  Counting the shuffles and timing gives:
 
 Players    | Time (ms) | Shuffles
------------|-----------|----------
-10         |   29   | 7 
-100        | 0      | 1
-1000       | 9      | 5
-10000      | 36     | 3
-100000     | 172    | 4
-1000000    | 1822   | 2
-10000000   | 158218 | 6
+-----------|-----------|---------
+10         | 29        | 7 
+100        | 0         | 1
+1000       | 9         | 5
+10000      | 36        | 3
+100000     | 172       | 4
+1000000    | 1822      | 2
+10000000   | 158218    | 6
     
-We don't have to shuffle more, but shuffling itself takes longer as we add players.  So the lack of extra shuffling suggests that chances of hitting a derangement remain about the same even as the number of permutations goes through the roof (there are n! permutations of n elements).  [It turns out](https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) that the ratio of derangements to permutations ends up approximately 1/e.
+We don't have to shuffle more, but shuffling itself takes longer as we add players.  So the lack of extra shuffling suggests that chances of hitting a derangement remain about the same even as the number of permutations goes through the roof (there are n! permutations of n elements).  Extending the earlier table with the number of permutations
+
+n       | Permutations | Derangements | Ratio
+--------|--------------|--------------|--------
+0       | 1            | 1            | 1
+1       | 1            | 0            | -
+2       | 2            | 1            | 2
+3       | 6            | 2            | 3
+4       | 24           | 9            | 2.66667
+5       | 120          | 44           | 2.72727
+6       | 720          | 265          | 2.71698
+7       | 5040         | 1854         | 2.71845
+8       | 40320        | 14833        | 2.71826
+9       | 362880       | 133496       | 2.71828
+10      | 3628800      | 1334961      | 2.71828
+11      | 39916800     | 14684570     | 2.71828
+
+We can see that the ratio levels off, at *e*.  See [the Wikipedia article](https://en.wikipedia.org/wiki/Derangement#Limit_of_ratio_of_derangement_to_permutation_as_n_approaches_.E2.88.9E) for details.
 
 #### Cycles
 
@@ -229,82 +246,82 @@ The first time I organised a Secret Santa game one player succeeded in figuring 
                      
 Seeing this graph made me think about a few things:
 
-1. It's fun to look at the assignments as cyclic graphs
+1. It's fun to look at the assignments as graphs
 2. It's possible we could have had one big cycle
 3. It's possible we could have had 8 pairs
 
 First let's look at this particular graph.  How likely was it that we would end up with 3 components?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those.  Instead I sampled 10 million at random:
 
 Components | Occurences | Ratio of total
------------|------------|----------------
-8 | 3           |     0.000000
-7 | 554         |     0.000055
-6 | 17683       |     0.001768
-5 |  211913     |     0.021191
-4 |    1156218  |     0.115622
-1 |   1698725   |     0.169873
-3 | 3090215     |     0.309022
-2 |  3824689    |     0.382469
+-----------|------------|---------------
+8          | 3          |     0.000000
+7          | 554        |     0.000055
+6          | 17683      |     0.001768
+5          | 211913     |     0.021191
+4          | 1156218    |     0.115622
+1          | 1698725    |     0.169873
+3          | 3090215    |     0.309022
+2          | 3824689    |     0.382469
     
 So 3 components is common.  The pairs on the other hand will hardly ever happen which is good as that would be a weird game.  What about the particular pattern of a 2 node components, a 6 node and an 8 node?  From a different sample of 10 million:
 
-Pattern | Occurences | Ratio of total
---------|------------|----------------
-[2, 2, 2, 2, 2, 2, 2, 2] |        3  |   0.000000
-[2, 2, 2, 2, 2, 2, 4]    |      145  |   0.000015
-[2, 2, 2, 2, 2, 3, 3]    |      420  |   0.000042
-[2, 2, 2, 2, 2, 6]       |     1185  |   0.000119
-[2, 2, 3, 3, 3, 3]       |     1755  |   0.000176
-[2, 2, 2, 2, 4, 4]       |     2197  |   0.000220
-[3, 3, 3, 3, 4]          |     3584  |   0.000358
-[4, 4, 4, 4]             |     4445  |   0.000445
-[2, 2, 2, 2, 3, 5]       |     4647  |   0.000465
-[2, 2, 2, 3, 3, 4]       |     8069  |   0.000807
-[2, 2, 4, 4, 4]          |     8857  |   0.000886
-[2, 2, 2, 2, 8]          |     8879  |   0.000888
-[2, 2, 2, 5, 5]          |    11398  |   0.001140
-[2, 3, 3, 3, 5]          |    16774  |   0.001677
-[2, 2, 2, 4, 6]          |    23567  |   0.002357
-[2, 3, 3, 4, 4]          |    23729  |   0.002373
-[3, 3, 3, 7]             |    23991  |   0.002399
-[2, 2, 2, 3, 7]          |    27059  |   0.002706
-[3, 3, 5, 5]             |    30141  |   0.003014
-[2, 2, 3, 3, 6]          |    31520  |   0.003152
-[2, 2, 6, 6]             |    47000  |   0.004700
-[3, 4, 4, 5]             |    56214  |   0.005621
-[2, 2, 2, 10]            |    56321  |   0.005632
-[2, 2, 3, 4, 5]          |    56515  |   0.005652
-[3, 3, 4, 6]             |    62915  |   0.006292
-[2, 4, 5, 5]             |    68133  |   0.006813
-[2, 4, 4, 6]             |    70954  |   0.007095
-[5, 5, 6]                |    90871  |   0.009087
-[4, 6, 6]                |    94380  |   0.009438
-[2, 3, 3, 8]             |    94532  |   0.009453
-[2, 2, 5, 7]             |    96845  |   0.009685
-[4, 4, 8]                |   106051  |   0.010605
-[2, 2, 4, 8]             |   106113  |   0.010611
-[2, 2, 3, 9]             |   126166  |   0.012617
-[2, 7, 7]                |   138703  |   0.013870
-[2, 3, 5, 6]             |   150604  |   0.015060
-[3, 3, 10]               |   150766  |   0.015077
-[2, 3, 4, 7]             |   162452  |   0.016245
-[4, 5, 7]                |   194590  |   0.019459
-[8, 8]                   |   212145  |   0.021215
-[3, 6, 7]                |   215861  |   0.021586
-[3, 5, 8]                |   227178  |   0.022718
-[3, 4, 9]                |   251454  |   0.025145
-[2, 6, 8]                |   282413  |   0.028241
-[2, 2, 12]               |   282690  |   0.028269
-[2, 5, 9]                |   301765  |   0.030177
-[2, 4, 10]               |   340009  |   0.034001
-[2, 3, 11]               |   411921  |   0.041192
-[7, 9]                   |   431182  |   0.043118
-[6, 10]                  |   453110  |   0.045311
-[5, 11]                  |   494113  |   0.049411
-[4, 12]                  |   566147  |   0.056615
-[3, 13]                  |   696411  |   0.069641
-[2, 14]                  |   971812  |   0.097181
-[16]                     |  1699299  |   0.169930
+Pattern                  | Occurences | Ratio of total
+-------------------------|------------|---------------
+[2, 2, 2, 2, 2, 2, 2, 2] |        3   |   0.000000
+[2, 2, 2, 2, 2, 2, 4]    |      145   |   0.000015
+[2, 2, 2, 2, 2, 3, 3]    |      420   |   0.000042
+[2, 2, 2, 2, 2, 6]       |     1185   |   0.000119
+[2, 2, 3, 3, 3, 3]       |     1755   |   0.000176
+[2, 2, 2, 2, 4, 4]       |     2197   |   0.000220
+[3, 3, 3, 3, 4]          |     3584   |   0.000358
+[4, 4, 4, 4]             |     4445   |   0.000445
+[2, 2, 2, 2, 3, 5]       |     4647   |   0.000465
+[2, 2, 2, 3, 3, 4]       |     8069   |   0.000807
+[2, 2, 4, 4, 4]          |     8857   |   0.000886
+[2, 2, 2, 2, 8]          |     8879   |   0.000888
+[2, 2, 2, 5, 5]          |    11398   |   0.001140
+[2, 3, 3, 3, 5]          |    16774   |   0.001677
+[2, 2, 2, 4, 6]          |    23567   |   0.002357
+[2, 3, 3, 4, 4]          |    23729   |   0.002373
+[3, 3, 3, 7]             |    23991   |   0.002399
+[2, 2, 2, 3, 7]          |    27059   |   0.002706
+[3, 3, 5, 5]             |    30141   |   0.003014
+[2, 2, 3, 3, 6]          |    31520   |   0.003152
+[2, 2, 6, 6]             |    47000   |   0.004700
+[3, 4, 4, 5]             |    56214   |   0.005621
+[2, 2, 2, 10]            |    56321   |   0.005632
+[2, 2, 3, 4, 5]          |    56515   |   0.005652
+[3, 3, 4, 6]             |    62915   |   0.006292
+[2, 4, 5, 5]             |    68133   |   0.006813
+[2, 4, 4, 6]             |    70954   |   0.007095
+[5, 5, 6]                |    90871   |   0.009087
+[4, 6, 6]                |    94380   |   0.009438
+[2, 3, 3, 8]             |    94532   |   0.009453
+[2, 2, 5, 7]             |    96845   |   0.009685
+[4, 4, 8]                |   106051   |   0.010605
+[2, 2, 4, 8]             |   106113   |   0.010611
+[2, 2, 3, 9]             |   126166   |   0.012617
+[2, 7, 7]                |   138703   |   0.013870
+[2, 3, 5, 6]             |   150604   |   0.015060
+[3, 3, 10]               |   150766   |   0.015077
+[2, 3, 4, 7]             |   162452   |   0.016245
+[4, 5, 7]                |   194590   |   0.019459
+[8, 8]                   |   212145   |   0.021215
+[3, 6, 7]                |   215861   |   0.021586
+[3, 5, 8]                |   227178   |   0.022718
+[3, 4, 9]                |   251454   |   0.025145
+[2, 6, 8]                |   282413   |   0.028241
+[2, 2, 12]               |   282690   |   0.028269
+[2, 5, 9]                |   301765   |   0.030177
+[2, 4, 10]               |   340009   |   0.034001
+[2, 3, 11]               |   411921   |   0.041192
+[7, 9]                   |   431182   |   0.043118
+[6, 10]                  |   453110   |   0.045311
+[5, 11]                  |   494113   |   0.049411
+[4, 12]                  |   566147   |   0.056615
+[3, 13]                  |   696411   |   0.069641
+[2, 14]                  |   971812   |   0.097181
+[16]                     |  1699299   |   0.169930
     
 It's one of the less rare ones, and happens around 3% of the time.  For fun let's try and work out the probability of hitting the complete single cycle of 16 to see if it matches our experience sampling.  To make the complete cycle, any element can be "first" so we can say there is one way of picking it.  Then the first element can pair with any other but itself, so there are 15 ways of doing that.  Then the next just has to avoid the first and itself, so there are 14 ways of doing that.  The next has 13 then 12 then 11 all the way to the last element which can only match to the first.
 
@@ -332,14 +349,14 @@ Close enough.  What about the probability of hitting the 8 cycle assignment.  Ho
 The idea of the recursion is that the first element can be mapped to any of the remaining n - 1 elements, so there are n - 1 different ways to do that.  Each of those ways then has the n - 2 case number of ways to continue.  This produces:
 
 Players | Paired derangements
---------|----------------
- 4   |        3
-    6   |       15
-    8   |      105
-    10  |      945
-    12  |    10395
-    14  |   135135
-    16  |  2027025
+--------|--------------------
+ 4      |       3
+ 6      |      15
+ 8      |     105
+ 10     |     945
+ 12     |   10395
+ 14     |  135135
+ 16     | 2027025
     
 This appears to be [this sequence](https://oeis.org/A001147), though I couldn't make sense of the descriptions there.  The figure 2027025 gives the actual probability for the 8 pairs of 16 players as:
 
@@ -349,7 +366,9 @@ So finding three earlier was just right!  With more time on the train just now I
 
 #### Back to the hat
 
-Back in the real world, we still have a problem in that the hat method has become annoying to implement, what with the high probability of telling people to restart multiple times.  There's a real world method described [in this video](https://www.youtube.com/watch?v=GhnCj7Fvqt0) which can come up with a valid assignment in one pass.  The idea is you shuffle once and then each participant is assigned to its neighbour in the shuffle with the last in line looping around to be assigned to the first.  The video explains how to make this work with real people and paper.  In code it looks like:
+Back in the real world, we still have a problem in that the hat method has become annoying to implement, what with the high probability of telling people to restart multiple times.  There is also an anonymity problem.  You gain information when you witness someone rejecting their own name.  In an extreme case, if the second-to-last person rejects their name, then you can be sure that the last persion will end up drawing the second-to-last.
+
+There's a real world method described [in this video](https://www.youtube.com/watch?v=GhnCj7Fvqt0) which can come up with a valid assignment in one pass and claims to achieve anonymity and fairness.  The idea is you shuffle once and then each participant is assigned to its neighbour in the shuffle with the last in line looping around to be assigned to the first.  The video explains how to make this work with real people and paper.  In code it looks like:
 
     fun draw5(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
