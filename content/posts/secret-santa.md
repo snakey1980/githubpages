@@ -104,7 +104,7 @@ Pattern                          | Occurences
 (1, 3), (2, 1), (3, 4), (4, 2)   | 9532
 (1, 2), (2, 3), (3, 4), (4, 1)   | 6509
     
-The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  So, what if we reject the draw as soon as we find an element in the wrong place:
+The algorithm is biased.  We are giving special treatment to the last pick and this is skewing the distribution.  There is also an anonymity problem.  You gain information when you witness someone rejecting their own name and put it back.  In an extreme case, if the second-to-last person rejects their name, then you can be sure that the last persion will end up drawing the second-to-last.  So, what if we reject the draw as soon as we find an element in the wrong place and reshuffle the whole hat:
 
     fun draw3(n: Int) : List<Pair<Int, Int>> {
         if (n < 4) throw IllegalArgumentException()
@@ -366,7 +366,7 @@ So finding three earlier was just right!  With more time on the train just now I
 
 #### Back to the hat
 
-Back in the real world, we still have a problem in that the hat method has become annoying to implement, what with the high probability of telling people to restart multiple times.  There is also an anonymity problem.  You gain information when you witness someone rejecting their own name.  In an extreme case, if the second-to-last person rejects their name, then you can be sure that the last persion will end up drawing the second-to-last.
+Back in the real world, we still have a problem in that the hat method has become annoying to implement, what with the high probability of telling people to restart multiple times.  
 
 There's a real world method described [in this video](https://www.youtube.com/watch?v=GhnCj7Fvqt0) which can come up with a valid assignment in one pass and claims to achieve anonymity and fairness.  The idea is you shuffle once and then each participant is assigned to its neighbour in the shuffle with the last in line looping around to be assigned to the first.  The video explains how to make this work with real people and paper.  In code it looks like:
 
