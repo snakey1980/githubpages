@@ -406,7 +406,7 @@ This is a [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher–Yates_sh
     
 which does produce valid derangements, but only complete cycles.  This is called [Sattolo's algorithm](https://danluu.com/sattolo/) and would be an alternative to the draw5() method above.
 
-There is an algorithm described [here](http://epubs.siam.org/doi/pdf/10.1137/1.9781611972986.7) which does produce random derangements.  Here it is more or less as described in the paper:
+There is an algorithm described [here](http://epubs.siam.org/doi/pdf/10.1137/1.9781611972986.7) which does produce random derangements without trial and error of permutations.  Here it is, more or less as described in the paper:
 
     fun randomDerangement(n: Int) : List<Int> {
         fun numDerangements(n: Int): BigDecimal {
