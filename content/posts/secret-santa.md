@@ -501,4 +501,8 @@ The key insight is to work out the probability that an exchanged element should 
 
 This appears to be correct under some testing I did, but I did not adopt this method for my Secret Santa program.
 
+#### In the wild
+
+I looked at some Secret Santa programs on Github.  In the first three I found I saw one correct one (similar to my draw4()), one unfair one (similar to my draw2()), and one which attempts to "fix" non-derangement permutations with localised switching, which I haven't analysed.
+
 My Secret Santa program is [here](https://github.com/snakey1980/secretsanta).
