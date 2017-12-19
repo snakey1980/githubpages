@@ -54,6 +54,7 @@ Cheryl's Birthday was [fun a few years ago](https://www.theguardian.com/science/
         }
     
         val problemSolver = Agent() // this is us!
+        
         for (statement in listOf(::statement1, ::statement2, ::statement3)) {
             problemSolver.tellStatement(statement)
             if (problemSolver.know()) {
