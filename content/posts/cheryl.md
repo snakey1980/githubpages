@@ -57,7 +57,7 @@ The statements as functions:
         return albert.know()
     }
     
-Our journey:    
+Us figuring it out step by step:    
     
     fun main(args: Array<String>) {
         val problemSolver = Agent()
