@@ -4,11 +4,17 @@ date: 2017-12-22T16:45:09-05:00
 draft: false
 ---
 
-Like [Cheryl's Birthday](https://snakey1980.github.io/posts/cheryl/) this [Pirates Problem](https://en.wikipedia.org/wiki/Pirate_game) is more fun to program than to work out by hand.  The problem goes like this: 
+Like [Cheryl's Birthday](https://snakey1980.github.io/posts/cheryl/) this [Pirates Problem](https://en.wikipedia.org/wiki/Pirate_game) is more fun to program than to work out by hand.  
+
+#### A pirate's favorite things
+
+The problem goes like this: 
 
 > It happens that pirates often acquire coins and need to share them out amongst themselves.  The way they do this is that the captain -- there is always strict seniority within any group of pirates -- proposes a distribution and the pirates vote on it, the captain having a casting vote.  If the distribution is approved it is implemented, otherwise a mutiny ensues and the new captain proposes a new distribution.  
 
-> Pirates are logical and don't trust each other and their favorite things are, in order: staying alive, getting coins, and killing other pirates.
+> Pirates are logical, know each other to be logical, and don't trust each other.
+
+> Their most favorite things are, in order: staying alive, getting coins, and killing other pirates.
 
 > In the case of 5 pirates and 100 coins, how will the captain propose to distribute them?
 
@@ -68,9 +74,9 @@ And here's the answer to the 5, 100 case:
 
     println(proposeDistribution(100, 5)) // prints [98, 0, 1, 0, 1]
     
+#### Unspecified behavior    
+    
 In this case the proposal is the best one possible and also will not result in a mutiny.  But it's possible that the captain can do his best but still come up with a distribution that produces a mutiny.  Let's say we have just one coin:
-
-
 
 <table>
 <thead>
@@ -165,3 +171,36 @@ We can add this to our implementation by calculating whether or not we have enou
 Then:
 
     println(proposeDistribution(1, 7)) // prints [1, 0, 0, 0, 0, 0, 0]
+    
+#### When do we get a mutiny in the 100 coin case?    
+    
+Given a coin / pirate count we can figure out easily if a mutiny is inevitable:
+
+    fun mutiny(coins: Int, pirates: Int): Boolean {
+        val caseProposed = proposeDistribution(coins, pirates)
+        val caseIfMutiny = proposeDistribution(coins, pirates - 1)
+        val mutineers = caseIfMutiny.mapIndexed { index, i ->
+            i >= caseProposed[index + 1]
+        }.count { it }
+        return mutineers > pirates / 2
+    }
+    
+And we can use this to see when a mutiny will occur for a given number of coins:
+
+    for (coins in listOf(2, 5, 10, 20, 50, 100)) {
+        val firstMutiny = generateSequence(2, { it + 1}).dropWhile { pirates ->
+            !mutiny(coins, pirates)
+        }.first()
+        println("With $coins coins, you need $firstMutiny pirates to cause mutiny")
+    }
+    
+Coins    |   Number of pirates to cause mutiny
+---------|------------------------------------
+2        | 7
+5        | 13
+10       | 23
+20       | 43
+50       | 103
+100      | 203
+
+2 * n + 3 makes sense, any fewer and we will have at best n + 1 pirates mad at us and n pleased with us and can break the tie in our favor.
