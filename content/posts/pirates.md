@@ -56,7 +56,7 @@ We take the vote buying money out of our cut, so long as we have enough.  And we
         val result = listOf(coins).plus((1..(pirates - 1)).map { 0 }).toMutableList()
         val votesNeeded = (pirates - 1) / 2
         if (votesNeeded > 0) {
-            val caseIfWeDie = distribute(coins, pirates - 1).toList()
+            val caseIfWeDie = proposeDistribution(coins, pirates - 1).toList()
             val cheapestVotes = caseIfWeDie.mapIndexed { index, i -> Pair(index, i) }
                     .sortedBy { it.second }.map { it.first }.take(votesNeeded)
             cheapestVotes.forEach {
