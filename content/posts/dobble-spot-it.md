@@ -1,5 +1,5 @@
 ---
-title: "Dobble Spot It"
+title: "Spot It aka Dobble"
 date: 2018-05-02T17:00:26-04:00
 draft: false
 ---
@@ -12,7 +12,7 @@ This leads to questions like
 * With the number of cards maxed, how many symbols are there in total?
 * How can you construct a deck which conforms to the rule?
 
-For the second question, here's some code that works, at least for symbolsPerCard = 8:
+For the third question, here's some code that works, at least for symbolsPerCard = 8:
 
     fun generateDeck(): Set<Set<Int>> {
         return mutableSetOf<Set<Int>>().apply {
