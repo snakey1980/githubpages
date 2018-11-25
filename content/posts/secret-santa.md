@@ -92,7 +92,7 @@ A good test would be to see if our procedure returns each of the nine, and that 
         
 We run it 100,000 times and would expect each pattern to occur around 11,111 times.  But:
 
-Pattern                          | Occurences
+Pattern                          | Occurrences
 ---------------------------------|-----------
 (1, 4), (2, 1), (3, 2), (4, 3)   | 19241
 (1, 2), (2, 4), (3, 1), (4, 3)   | 13004
@@ -131,7 +131,7 @@ The algorithm is biased.  We are giving special treatment to the last pick and t
     
 We will be doing more work here, but the distribution looks better:
 
-Pattern                          | Occurences
+Pattern                          | Occurrences
 ---------------------------------|-----------
 (1, 2), (2, 4), (3, 1), (4, 3)   | 11221
 (1, 4), (2, 3), (3, 1), (4, 2)   | 11203
@@ -252,7 +252,7 @@ Seeing this graph made me think about a few things:
 
 First let's look at this particular graph.  How likely was it that we would end up with 3 components?  To find the real answer we'd have to look at all derangements of 16 elements and there are 7,697,064,251,745 of those.  Instead I sampled 10 million at random:
 
-Components | Occurences | Ratio of total
+Components | Occurrences| Ratio of total
 -----------|------------|---------------
 8          | 3          |     0.000000
 7          | 554        |     0.000055
@@ -265,7 +265,7 @@ Components | Occurences | Ratio of total
     
 So 3 components is common.  The pairs on the other hand will hardly ever happen which is good as that would be a weird game.  What about the particular pattern of a 2 node components, a 6 node and an 8 node?  From a different sample of 10 million:
 
-Pattern                  | Occurences | Ratio of total
+Pattern                  | Occurrences | Ratio of total
 -------------------------|------------|---------------
 [2, 2, 2, 2, 2, 2, 2, 2] |        3   |   0.000000
 [2, 2, 2, 2, 2, 2, 4]    |      145   |   0.000015
