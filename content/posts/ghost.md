@@ -5,6 +5,8 @@ draft: false
 ---
 Here's a program that helps (you cheat) at [Ghost](https://en.wikipedia.org/wiki/Ghost_(game)).  I must look into Lexicant some time too.
 
+UPDATE: this may not be ideal.  I just had it play itself with some strange results.  I will look into it and may revise it.
+
     fun main(args: Array<String>) {
         repl()
     }
