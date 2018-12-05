@@ -3,9 +3,7 @@ title: "Ghost"
 date: 2018-12-05T12:00:54-05:00
 draft: false
 ---
-Here's a program that helps (you cheat) at [Ghost](https://en.wikipedia.org/wiki/Ghost_(game)).  I must look into Lexicant some time too.
-
-UPDATE: this may not be ideal.  I just had it play itself with some strange results.  I will look into it and may revise it.
+Here's a program that helps (you cheat) at [Ghost](https://en.wikipedia.org/wiki/Ghost_(game)).  I think I have a bug because it seems to win more from starting than most people think it should (could be the dictionary's fault though).  I must look into Lexicant some time too.
 
     fun main(args: Array<String>) {
         repl()
@@ -46,10 +44,14 @@ UPDATE: this may not be ideal.  I just had it play itself with some strange resu
         }
         val wordsThatKillMe = wordsThatKill(given, possibleWords, players)
         val safeWords = possibleWords.minus(wordsThatKillMe)
+        val killerWords = safeWords.filter { word ->
+            val start = word.take(given.length + 1)
+            wordsThatKillMe.none { it.startsWith(start) }
+        }
         return if (safeWords.isEmpty()) {
             Surrender(wordsThatKillMe)
         } else {
-            val safeWord = safeWords.sorted().first()
+            val safeWord = killerWords.sorted().firstOrNull()?: safeWords.sorted().first()
             Letter(safeWord.removePrefix(given).first(), safeWord)
         }
     }
@@ -72,3 +74,7 @@ UPDATE: this may not be ideal.  I just had it play itself with some strange resu
             println("Given '$given' and $players players, I recommend you ${play(given, players)}\n")
         }
     }
+    
+I had it play itself.  Out of all the possible starting letters, 9 give a win, being
+
+    b, f, h, j, q, s, w, x, z
